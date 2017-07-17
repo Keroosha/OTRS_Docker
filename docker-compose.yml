@@ -1,0 +1,26 @@
+version: "3"
+services:
+  app:
+    image: otrs_custom
+    depends_on: 
+    - dbase
+    links:
+    - dbase
+    ports:
+      - "80:80"
+  volumes:
+    - './backups:/backup'
+  dbase:
+    image: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: sampletext
+    deploy:
+      resources:
+        limits:
+          cpus: "0.6"
+          memory: "1024M"
+      restart_policy:
+          condition: on-failure
+    volumes:
+      - './mysql_config:/etc/mysql/conf.d'
+      - './db_container:/var/lib/mysql'
